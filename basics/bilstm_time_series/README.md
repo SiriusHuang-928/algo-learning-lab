@@ -16,12 +16,3 @@ This project uses BiLSTM to classify three types of simulated sensor waveforms:
 ```bash
 python bilstm.py
 
-## Environment
-
-- pytorch
-- numpy
-
-## Input Shape
-
-Input tensor shape: [batch_size, seq_len, input_dim]
-Sequence length = 20
