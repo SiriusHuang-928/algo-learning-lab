@@ -1,0 +1,89 @@
+# CNN-BiLSTM Time Series Project Bug Record & Full Fix Solution
+# Bug1: CrossEntropyLoss label dtype mismatch; Bug2: Windows OMP libiomp5md.dll conflict crash
+
+## Bug 1: RuntimeError caused by float32 label tensor for CrossEntropyLoss
+### Error Behavior
+RuntimeError triggered at line loss = loss_fn(pred, by)
+Shape & dtype print log:
+pred shape: torch.Size([64, 3]) torch.float32
+by shape: torch.Size([64]) torch.float32
+
+### Root Cause
+nn.CrossEntropyLoss has strict requirements for target labels:
+1. Label tensor must be int64(long) integer type, store class index 0 / 1 / 2
+2. Float32 type is not supported, floating values cannot act as class index, throws runtime error
+
+### Reproduce Reason
+During dataset split or data conversion, ground truth label tensor was implicitly cast to float32, losing original int64 type.
+
+### Fix Solution
+Force convert label to long type before feeding into loss function: by = by.long()
+
+### Fixed Training Code Segment
+def train_epoch(model, opt, loss_fn, x_train, y_train, batch_size):
+    model.train()
+    total_loss = 0.0
+    shuffle_idx = torch.randperm(len(x_train))
+    x_shuf, y_shuf = x_train[shuffle_idx], y_train[shuffle_idx]
+    for start in range(0, len(x_shuf), batch_size):
+        bx = x_shuf[start:start+batch_size]
+        by = y_shuf[start:start+batch_size]
+        opt.zero_grad()
+        pred = model(bx)
+        # Critical fix line
+        by = by.long()
+        loss = loss_fn(pred, by)
+        loss.backward()
+        opt.step()
+        total_loss += loss.item()
+    return total_loss
+
+### Synchronous Fix for Evaluation Function
+def evaluate(model, x_test, y_test):
+    model.eval()
+    with torch.no_grad():
+        # Unify label type to avoid identical error
+        y_test = y_test.long()
+        logits = model(x_test)
+        preds = torch.argmax(logits, dim=1)
+        total_correct = (preds == y_test).sum().item()
+        overall_acc = total_correct / len(y_test)
+        # Per-class accuracy calculation omitted
+    return overall_acc, class_acc
+
+### Prevention Standard
+When building dataset, force label numpy array to int64 before converting to tensor:
+y_np = np.array(y_raw, dtype=np.int64)
+y_tensor = torch.from_numpy(y_np)
+
+## Bug 2: OMP Error #15 libiomp5md.dll already initialized, process exit code 3
+### Error Behavior
+Program prints red OMP error log during runtime and terminates directly without Python traceback.
+Original error log:
+OMP: Error #15: Initializing libiomp5md.dll, but found libiomp5md.dll already initialized.
+OMP: Hint This means that multiple copies of the OpenMP runtime have been linked into the program.
+
+### Root Cause (Windows Only)
+Dependency library conflict:
+PyTorch ships with its own MKL parallel library libiomp5md.dll, while matplotlib / numpy carry another independent OpenMP runtime. Duplicate DLL loading triggers system protection and kills the process.
+Frequently appears in Jupyter Notebook & VSCode interactive environment.
+
+### Fix Solution: Set environment variables at the VERY TOP of script, before all imports
+# Must be written before importing torch / numpy / matplotlib
+import os
+# Allow duplicated OpenMP library load to eliminate crash
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+# Optional enhanced fix: limit CPU thread count to reduce conflict possibility
+os.environ["OMP_NUM_THREADS"] = "1"
+
+# Import libraries afterwards
+import numpy as np
+import torch
+import torch.nn as nn
+import matplotlib.pyplot as plt
+
+### Supplementary Note
+1. This fix is only required for Windows operating system, Linux & MacOS have no such conflict
+2. Environment variable must be defined before import torch; no effect if set after torch loaded
+3. This adjustment does not affect model training accuracy, loss calculation or gradient update, only bypasses low-level system library conflict
