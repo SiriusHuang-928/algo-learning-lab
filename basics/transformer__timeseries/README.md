@@ -25,10 +25,11 @@ See `requirements.txt` for full dependency list. Core requirements:
 ### 1. Install dependencies
 ```bash
 pip install -r requirements.txt
+```
 
 ### 2. Train the model
 
-```
+```bash
 python train_eval.py
 ```
 
@@ -40,7 +41,7 @@ The script will automatically:
 
 ### 3. Offline inference
 
-```
+```bash
 python infer_demo.py
 ```
 
