@@ -22,6 +22,7 @@ Input(20) → Linear(20,32) → ReLU → Linear(32,8) → ReLU → Linear(8,1)
 ```bash
 pip install torch numpy matplotlib
 python timeseries_mlp_classifier.py
+```
 
 ### Limitation
 
