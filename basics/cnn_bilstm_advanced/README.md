@@ -32,17 +32,26 @@ cnn_bilstm_advanced/
 ## Environment Install
 ```bash
 pip install -r requirements.txt
+```
 
 ## Run Command
+
 1. Train model, auto generate all figures & save optimal weight
+
+```
 python train_eval.py
+```
 
 After training finished:
-- saved_weights/cnn_bilstm_best.pth : Best model parameter
-- output_figures/ contains 3 pictures: loss curve, confusion matrix, conv1 feature map
+
+- `saved_weights/cnn_bilstm_best.pth` : Best model parameter
+- `output_figures/` contains 3 pictures: loss curve, confusion matrix, conv1 feature map
 
 2. Offline batch inference (NO retrain, only load saved weight)
+
+```
 python infer_demo.py
+```
 
 ## Key Feature
 
