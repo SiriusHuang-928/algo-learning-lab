@@ -14,6 +14,7 @@ For this task: `(N, 1, 20)`
 ## How to run
 ```bash
 python 1d_cnn_timeseries.py
+```
 
 ## Features
 
