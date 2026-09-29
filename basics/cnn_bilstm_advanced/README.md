@@ -11,15 +11,21 @@ All folders are automatically created by code, clone & run directly without manu
 ## File Structure
 cnn_bilstm_advanced/
 ├── dataset.py         Waveform data generation & train/test split
+
 ├── model.py           CNN-BiLSTM network + forward hook for conv feature capture
+
 ├── train_eval.py      Main training script, auto save best weight & figures
+
 ├── infer_demo.py      Offline inference script, load pretrained weight only
+
 ├── requirements.txt   All python dependencies
+
 ├── README.md
 
 ## Auto-generated folders after running train_eval.py
 
 ├── saved_weights/     Store best model weight cnn_bilstm_best.pth
+
 └── output_figures/    Auto save 3 plotting results (no pop-up window)
 
 ## Environment Install
