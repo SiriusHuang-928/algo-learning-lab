@@ -50,14 +50,23 @@ Load pretrained weights, generate 10 random waveforms and print ground truth / p
 
 ```
 transformer-timeseries-classification/
+
 ├── dataset.py          # Waveform generation and dataset construction
+
 ├── model.py            # Transformer classification model (with positional encoding)
+
 ├── train_eval.py       # Main script for training, evaluation and visualization
+
 ├── infer_demo.py       # Offline batch inference demo
+
 ├── requirements.txt    # Dependency list
+
 ├── README.md           # Project documentation
+
 ├── saved_weights/      # Checkpoint save directory (auto-generated)
+
 └── output_figures/     # Visualization output directory (auto-generated)
+
 ```
 
 ## Key Learning Points
