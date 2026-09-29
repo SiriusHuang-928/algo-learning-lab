@@ -15,6 +15,7 @@ numpy>=1.24
 ## Run Command
 ```bash
 python cnn_lstm.py
+```
 
 ## Core Features
 
