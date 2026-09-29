@@ -15,4 +15,4 @@ This project uses BiLSTM to classify three types of simulated sensor waveforms:
 ## How to Run
 ```bash
 python bilstm.py
-
+```
