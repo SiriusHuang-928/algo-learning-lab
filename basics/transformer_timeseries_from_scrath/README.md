@@ -119,8 +119,8 @@ model = CustomTransformerClassifier(
 )
 ```
 
-- For simple tasks, 1~3 encoder layers are recommended; for complex tasks, depth can be increased to 6~12 layers.
-- `dim_feedforward` is typically set to 2~4 times the value of `d_model`.
+- For simple tasks, 1-3 encoder layers are recommended; for complex tasks, depth can be increased to 6-12 layers.
+- `dim_feedforward` is typically set to 2-4 times the value of `d_model`.
 - The number of attention heads must evenly divide the feature dimension.
 
 ## License
