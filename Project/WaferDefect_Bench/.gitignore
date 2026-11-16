@@ -1,0 +1,10 @@
+# .gitignore
+*.pth
+*.pt
+*.onnx
+saved_weights/
+output_figures/
+__pycache__/
+*.csv
+*.log
+.ipynb_checkpoints
