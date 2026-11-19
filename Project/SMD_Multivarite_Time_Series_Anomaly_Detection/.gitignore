@@ -1,0 +1,16 @@
+# 数据集
+ServerMachineDataset/
+
+# 训练输出
+checkpoints/
+logs/
+
+# Python缓存文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 系统文件
+.DS_Store
+Thumbs.db
